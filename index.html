@@ -6,7 +6,7 @@
             let lose = 0;
             let plays = 0;
         window.onload = function () {
-            alert('here');
+            //alert('here');
             
             initGame();
         };
@@ -19,6 +19,7 @@
             e1.textContent = "";
             e2.textContent = "";
             e3.textContent = "";
+            ///is there a better way to clear?, 2 googles said this is how
             e4.textContent = "PLAY AGAIN";
             initGame();
         }
@@ -31,27 +32,25 @@
 
             document.getElementById("door" + doorNumber).classList.add("winner");
            // document.getElementById("door" + doorNumber).innerText = "winner";
+           ///why was this here?
 
         }
         function showStats(a, b){
           
           let e1 = document.getElementById('pct');
           let e2 = document.getElementById('wins');
-          let e3 = document.getElementById('losses');
-          
+          let e3 = document.getElementById('losses');   
           
           let totalPlays = a + b;          
-          let winPercentage = a / totalPlays * 100;
-          let wPct = winPercentage.toFixed(2);
+          let winPercentage = (a / totalPlays * 100).toFixed(2);
 
-          
-          e1.textContent = "Percentage: " + wPct;
+          e1.textContent = "Percentage: " + winPercentage;
           e2.textContent = "Wins: " + win;
           e3.textContent = "Losses: " + lose;
        
         }
         function anyDoorChoosen() {
-         let e1 = document.getElementById('wl');
+            let e1 = document.getElementById('wl');
             e1.textContent = "STAY OR SWITCH"
             return document.getElementById("door1").classList.contains('doorChoosen') ||
                 document.getElementById("door2").classList.contains('doorChoosen') ||
@@ -81,17 +80,26 @@
            let e1 = document.getElementById('wl');
            e1.textContent = "WIN"
 
+           //document.getElementById("door1").style.backgroundColor = "Green";
+           //document.getElementById("door2").style.backgroundColor = "Green";
+           //document.getElementById("door3").style.backgroundColor = "Green";     
+
             win++;
             showStats(win, lose);
-            initGame();
+            setTimeout(initGame(), 1000);
+            ///I want it to flash green for 5 seconds and then move on
         }
         function loser() {
            // alert("You're a loser!");
            let e1 = document.getElementById('wl');
            e1.textContent = "LOSE"
-            lose++;
+           lose++;
+           //document.getElementById("door1").style.backgroundColor = "Red";
+           //document.getElementById("door2").style.backgroundColor = "Red";
+           //document.getElementById("door3").style.backgroundColor = "Red";     
+
             showStats(win, lose);
-            initGame();
+            setTimeout(initGame(), 1000);
         }
 
         function doorClicked(e) {
