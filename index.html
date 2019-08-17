@@ -1,0 +1,187 @@
+<html>
+
+<head>
+    <script>
+            let win = 0;
+            let lose = 0;
+            let plays = 0;
+        window.onload = function () {
+           //  alert('here');
+            
+            initGame();
+        };
+        function restartGame() {
+            let e1 = document.getElementById('pct');
+            let e2 = document.getElementById('wins');
+            let e3 = document.getElementById('losses');
+            let e4 = document.getElementById('wl');
+          
+            e1.textContent = "";
+            e2.textContent = "";
+            e3.textContent = "";
+            e4.textContent = "PLAY AGAIN";
+            initGame();
+        }
+        function initGame() {
+            
+            var doorNumber = Math.floor(Math.random() * 3) + 1;
+            document.getElementById("door1").className = "door";
+            document.getElementById("door2").className = "door";
+            document.getElementById("door3").className = "door";
+
+            document.getElementById("door" + doorNumber).classList.add("winner");
+           // document.getElementById("door" + doorNumber).innerText = "winner";
+
+        }
+        function showStats(a, b){
+          
+          let e1 = document.getElementById('pct');
+          let e2 = document.getElementById('wins');
+          let e3 = document.getElementById('losses');
+          
+          
+          let totalPlays = a + b;          
+          let winPercentage = a / totalPlays * 100;
+          let wPct = winPercentage.toFixed(2);
+
+          
+          e1.textContent = "Percentage: " + wPct;
+          e2.textContent = "Wins: " + win;
+          e3.textContent = "Losses: " + lose;
+       
+        }
+        function anyDoorChoosen() {
+         let e1 = document.getElementById('wl');
+            e1.textContent = "STAY OR SWITCH"
+            return document.getElementById("door1").classList.contains('doorChoosen') ||
+                document.getElementById("door2").classList.contains('doorChoosen') ||
+                document.getElementById("door3").classList.contains('doorChoosen')
+        }
+
+        function isDoorWinnerOrChoosen(door) {
+            return document.getElementById(door).classList.contains('doorChoosen') || document.getElementById(door).classList.contains('winner')
+        }
+
+        function getDoorsNotChosenAndNotWinner() {
+            var a = [];
+            if (!isDoorWinnerOrChoosen("door1")) {
+                a.push(document.getElementById("door1"))
+            }
+            if (!isDoorWinnerOrChoosen("door2")) {
+                a.push(document.getElementById("door2"))
+            }
+            if (!isDoorWinnerOrChoosen("door3")) {
+                a.push(document.getElementById("door3"))
+            }
+            return a;
+        }
+
+        function winner() {
+           // alert("You're a winner!");
+           let e1 = document.getElementById('wl');
+           e1.textContent = "WIN"
+
+            win++;
+            showStats(win, lose);
+            initGame();
+        }
+        function loser() {
+           // alert("You're a loser!");
+           let e1 = document.getElementById('wl');
+           e1.textContent = "LOSE"
+            lose++;
+            showStats(win, lose);
+            initGame();
+        }
+
+        function doorClicked(e) {
+
+            // In Internet Explorer you should use the global variable `event`  
+            e = e || event;
+
+            // In Internet Explorer you need `srcElement`
+            var target = e.target || e.srcElement;
+            var id = target.id;
+
+            if (!anyDoorChoosen()) {
+                // this is the users first choice
+                document.getElementById(id).classList.add('doorChoosen');
+                document.getElementById(id).classList.remove('door');
+
+                // Open a loser door
+                var losers = getDoorsNotChosenAndNotWinner();
+                var loserDoorToOpen = Math.floor(Math.random() * losers.length); // arrays are 0 based
+                losers[loserDoorToOpen].classList.add("doorLoser");
+                losers[loserDoorToOpen].classList.remove('door');
+
+            }
+            else {
+                if (document.getElementById(id).classList.contains('doorLoser')) {
+                    alert("Don't select the loser you loser");
+                }
+                else if (document.getElementById(id).classList.contains('doorChoosen')) {
+                    // User stayed with his selection
+                    if (document.getElementById(id).classList.contains('winner')) {
+                        winner();
+
+                    }
+                    else {
+                        loser();
+                    }
+                } else {
+                    // User switched
+                    if (document.getElementById(id).classList.contains('winner')) {
+                        winner();
+                        
+                    }
+                    else {
+                        loser();
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .door {
+            background-color: blue;
+            width: 100;
+            height: 100;
+            margin: 5;
+        }
+
+        .doorChoosen {
+            background-color: yellow;
+            width: 100;
+            height: 100;
+            margin: 5;
+        }
+
+        .doorWinner {
+            background-color: green;
+            width: 100;
+            height: 100;
+            margin: 5;
+        }
+
+        .doorLoser {
+            background-color: red;
+            width: 100;
+            height: 100;
+            margin: 5;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="restartGame()">Restart</button>
+    <div id="door1" onclick="doorClicked();">Door 1</div>
+    <div id="door2" onclick="doorClicked();">Door 2</div>
+    <div id="door3" onclick="doorClicked();">Door 3</div>
+    <h1 id="wl"></h1>
+    <div id="pct"></div>
+    <div id="wins"></div>
+    <div id="losses"></div>
+    
+</body>
+
+</html>
